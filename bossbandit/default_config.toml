@@ -1,0 +1,118 @@
+# BossBandit configuration
+# ---------------------------------------------------------------------------
+# `bossbandit init` copies this file to ./config.toml. Edit that copy.
+# Secrets (API keys) do NOT go here: they go in the .env file.
+# ---------------------------------------------------------------------------
+
+[brand]
+# Your channel name. Shows as a small watermark and in captions.
+channel_name = "Boss Bandit"
+# Hashtags added to every post (keep it to 2-3; the AI adds clip-specific ones).
+base_hashtags = ["#millennialgamer", "#twitchclips", "#gaming"]
+
+[schedule]
+# How many finished videos to produce per daily run.
+# TikTok sweet spot for a new account: 2-3 per day, every day.
+posts_per_day = 3
+# Also build one 60-90s "best of the week" compilation every run?
+# Videos over 1 minute are required for TikTok Creator Rewards payouts.
+make_compilation = true
+# Clips must be at least this many seconds long to be considered.
+min_clip_seconds = 8
+# ...and no longer than this.
+max_clip_seconds = 60
+# Look back this many days for clips.
+lookback_days = 3
+# Never use a clip with fewer views than this (proves it's actually good).
+min_clip_views = 150
+# After pre-ranking, download + transcribe this many candidates for the AI to judge.
+candidates_to_analyze = 15
+# Max clips per streamer per day (keeps the feed varied).
+max_per_streamer = 1
+# Clip languages to accept (Twitch language codes).
+languages = ["en"]
+
+[discovery]
+# Automatically look for NEW 30+ streamers every run.
+enabled = true
+# Games millennials grew up on / still play. Clips from these games are
+# scanned for broadcasters we don't know yet.
+games = [
+  "World of Warcraft", "Diablo IV", "Call of Duty: Warzone", "Halo Infinite",
+  "Escape from Tarkov", "Hunt: Showdown 1896", "Old School RuneScape",
+  "StarCraft II", "Counter-Strike", "Elden Ring", "Path of Exile 2",
+  "Retro", "Grand Theft Auto V", "Dark and Darker", "Minecraft",
+]
+# Only consider Twitch Partners (established, monetized streamers).
+require_partner = true
+# A newly found streamer needs at least this many total clip views in the
+# lookback window to be worth considering.
+min_total_clip_views = 3000
+# Twitch account created on or before this year (a 2012 account means
+# they were streaming as an adult 14 years ago).
+max_account_year = 2014
+# Let the AI approve candidates on its own when it is confident they are 30+.
+# If false, run `bossbandit streamers review` to approve by hand.
+auto_approve = true
+# Minimum AI confidence (0-1) to auto-approve.
+auto_approve_confidence = 0.8
+
+[permissions]
+# "any"      -> use any approved streamer's clips (credit is always shown).
+# "granted"  -> only streamers you've marked with `bossbandit streamers permit <name>`.
+# Switch to "granted" once you have a few yeses; it protects your account.
+mode = "any"
+
+[render]
+# blur   = full gameplay centered on a blurred copy of itself (safe default)
+# zoom   = gameplay center-cropped to fill more of the screen
+# split  = facecam on top, gameplay bottom (needs facecam set per streamer)
+layout = "blur"
+width = 1080
+height = 1920
+fps = 30
+# Burn in word-by-word captions (needs `pip install faster-whisper`).
+captions = true
+# Big headline text at the top for the first few seconds.
+hook_text = true
+hook_seconds = 4.0
+# Font: Windows has "Arial Black" / "Impact"; anything missing falls back.
+font = "Arial Black"
+caption_color = "#FFFFFF"
+highlight_color = "#FFD400"
+# x264 quality (lower = better/bigger). 20 is visually lossless for phones.
+crf = 20
+preset = "medium"
+
+[ai]
+# Claude writes the hook, caption and hashtags and picks the best clips.
+# Without ANTHROPIC_API_KEY the bot still works with simpler rules.
+model = "claude-opus-5-5"
+effort = "low"
+
+[whisper]
+# tiny / base / small / medium. "small" is the accuracy/speed sweet spot on a CPU.
+model = "small"
+# "cpu" works everywhere. "cuda" is faster on an NVIDIA GPU but needs the
+# CUDA 12 + cuDNN 9 libraries installed; if it errors, BossBandit falls back to CPU.
+device = "cpu"
+
+[paths]
+# Where finished videos go. Point this INSIDE your Google Drive / OneDrive /
+# Dropbox folder and they'll show up on your phone automatically.
+output_dir = "output"
+data_dir = "data"
+
+# ---------------------------------------------------------------------------
+# Starter list of established streamers who are 30+ in 2026. Approved on
+# first run. Birth years are from public info -- double-check anyone you
+# care about. Logins that no longer exist on Twitch are skipped automatically.
+# ---------------------------------------------------------------------------
+[seed]
+streamers = [
+  "shroud", "summit1g", "lirik", "timthetatman", "drlupo", "cohhcarnage",
+  "sodapoppin", "zackrawrr", "moistcr1tikal", "jerma985", "northernlion",
+  "day9tv", "disguisedtoast", "lilypichu", "dansgaming", "giantwaffle",
+  "ninja", "kripparrian", "itshafu", "sacriel", "esfandtv", "kitboga",
+  "moonmoon", "admiralbahroo", "gladd", "datto", "nickmercs", "cdnthe3rd",
+]
